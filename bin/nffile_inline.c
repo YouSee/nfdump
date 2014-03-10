@@ -407,8 +407,8 @@ void		*p = (void *)input_record;
 			case EX_NEL_COMMON: {
 				tpl_ext_46_t *tpl = (tpl_ext_46_t *)p;
 				output_record->nat_event = tpl->nat_event;
-				output_record->xlate_src_port = tpl->src_xlate_84;
-				output_record->xlate_dst_port = tpl->dst_xlate_84;
+//				output_record->xlate_src_port = tpl->src_xlate_84;
+//				output_record->xlate_dst_port = tpl->dst_xlate_84;
 				output_record->ingress_vrfid = tpl->ingress_vrfid;
 				p = (void *)tpl->data;
 			} break;
