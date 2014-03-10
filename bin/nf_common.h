@@ -84,6 +84,10 @@ void Setv6Mode(int mode);
 
 int Getv6Mode(void);
 
+void SetTrimMode(int mode);
+
+int GetTrimMode(void);
+
 int Proto_num(char *protostr);
 
 void format_file_block_header(void *header, char **s, int tag);

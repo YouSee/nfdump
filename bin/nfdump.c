@@ -767,7 +767,7 @@ char 		Ident[IDENTLEN];
 
 	for ( i=0; i<AGGR_SIZE; AggregateMasks[i++] = 0 ) ;
 
-	while ((c = getopt(argc, argv, "6aA:Bbc:D:E:s:hHn:i:j:f:qzr:v:w:K:M:NImO:R:XZt:TVv:x:l:L:o:")) != EOF) {
+	while ((c = getopt(argc, argv, "S6aA:Bbc:D:E:s:hHn:i:j:f:qzr:v:w:K:M:NImO:R:XZt:TVv:x:l:L:o:")) != EOF) {
 		switch (c) {
 			case 'h':
 				usage(argv[0]);
@@ -936,6 +936,9 @@ char 		Ident[IDENTLEN];
 			case '6':	// print long IPv6 addr
 				Setv6Mode(1);
 				break;
+                        case 'S':   // trim outpur string for white space
+                                SetTrimMode(1);
+                                break;
 			default:
 				usage(argv[0]);
 				exit(0);

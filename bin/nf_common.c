@@ -74,6 +74,7 @@ static int	format_index		= 0;
 
 static int		do_tag 		 = 0;
 static int 		long_v6 	 = 0;
+static int 		trim_mode 	 = 0;
 static int		scale	 	 = 1;
 static double	duration;
 
@@ -577,17 +578,55 @@ void Setv6Mode(int mode) {
 	long_v6 += mode;
 } 
 
+void SetTrimMode(int mode) {
+    trim_mode = mode;
+}
+
 int Getv6Mode(void) {
 	return long_v6;
 } 
 
-void Proto_string(uint8_t protonum, char *protostr) {
+// Stores the trimmed input string into the given output buffer, which must be
+// large enough to store the result.  If it is too small, the output is
+// truncated.
+static size_t trimwhitespace(char *out, size_t len, const char *str)
+{
+  if(len == 0)
+    return 0;
 
+  const char *end;
+  size_t out_size;
+
+  // Trim leading space
+  while(isspace(*str)) str++;
+
+  if(*str == 0)  // All spaces?
+  {
+    *out = 0;
+    return 1;
+  }
+
+  // Trim trailing space
+  end = str + strlen(str) - 1;
+  while(end > str && isspace(*end)) end--;
+  end++;
+
+  // Set output size to minimum of trimmed string length and buffer size minus 1
+  out_size = (end - str) < len-1 ? (end - str) : len-1;
+
+  // Copy trimmed string and add null terminator
+  memcpy(out, str, out_size);
+  out[out_size] = 0;
+
+  return out_size;
+}
+
+void Proto_string(uint8_t protonum, char *protostr) {
 	if ( protonum >= NumProtos || !scale ) {
-		snprintf(protostr,16,"%-5i", protonum );
+                snprintf(protostr,16,"%-5i", protonum );
 	} else {
 		strncpy(protostr, protolist[protonum], 16);
-	}
+            }
 
 } // End of Proto_string
 
@@ -1549,7 +1588,13 @@ int	i, index;
 	duration = r->last - r->first;
 	duration += ((double)r->msec_last - (double)r->msec_first) / 1000.0;
 	for ( i=0; i<token_index; i++ ) {
+            if (trim_mode) {
+                char trimbuf[MAX_STRING_LENGTH];
+                token_list[i].string_function(r, trimbuf);
+                trimwhitespace(token_list[i].string_buffer, MAX_STRING_LENGTH, trimbuf);
+            } else {
 		token_list[i].string_function(r, token_list[i].string_buffer);
+            }
 	}
 
 	// concat all strings together for the output line
