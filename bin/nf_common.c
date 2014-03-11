@@ -1833,9 +1833,12 @@ char 	*s;
 	tt = r->first;
 	ts = localtime(&tt);
 	strftime(string, MAX_STRING_LENGTH-1, "%Y-%m-%d %H:%M:%S", ts);
+	char* stringZone = malloc(MAX_STRING_LENGTH);
+	strftime(stringZone, MAX_STRING_LENGTH-1, "%z", ts);
 	s = string + strlen(string);
-	snprintf(s, MAX_STRING_LENGTH-strlen(string)-1,".%03u", r->msec_first);
+	snprintf(s, MAX_STRING_LENGTH-strlen(string)-1,".%03u%s", r->msec_first, stringZone);
 	string[MAX_STRING_LENGTH-1] = '\0';
+	free(stringZone);
 
 } // End of String_FirstSeen
 
@@ -1847,9 +1850,12 @@ char 	*s;
 	tt = r->last;
 	ts = localtime(&tt);
 	strftime(string, MAX_STRING_LENGTH-1, "%Y-%m-%d %H:%M:%S", ts);
+	char* stringZone = malloc(MAX_STRING_LENGTH);
+	strftime(stringZone, MAX_STRING_LENGTH-1, "%z", ts);
 	s = string + strlen(string);
-	snprintf(s, MAX_STRING_LENGTH-strlen(string)-1,".%03u", r->msec_last);
+	snprintf(s, MAX_STRING_LENGTH-strlen(string)-1,".%03u%s", r->msec_last, stringZone);
 	string[MAX_STRING_LENGTH-1] = '\0';
+	free(stringZone);
 
 } // End of String_LastSeen
 
